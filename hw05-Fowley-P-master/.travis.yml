@@ -1,0 +1,10 @@
+language: c
+compiler: gcc
+
+script:
+  - make
+  - ./lsdir_testcase1.sh
+  - ./lsdir_testcase2.sh
+  - ./lsdir_testcase3.sh
+  - ./lsdir_testcase4.sh
+  - ./lsdir_testcase6.sh
