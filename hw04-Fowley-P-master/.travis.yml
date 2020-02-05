@@ -1,0 +1,20 @@
+language: c
+compiler: gcc
+
+before_install:
+  - sudo apt-get install valgrind
+
+script: 
+  - make all
+  - gcc --std=c11 -Wall -o knapsack-testcase1 knapsack-testcase1.c knapsack.c
+  - gcc --std=c11 -Wall -o knapsack-testcase2 knapsack-testcase2.c knapsack.c
+  - ./knapsack-testcase1
+  - ./knapsack-testcase2
+  - ./knapsack-testcase3.sh
+  - ./knapsack-testcase4.sh
+  - ./knapsack-testcase5.sh
+  - ./knapsack-testcase6.sh
+  - gcc --std=c11 -Wall -g -o knapsack-tc1-valgrind knapsack-testcase1.c knapsack.c
+  - gcc --std=c11 -Wall -g -o knapsack-tc2-valgrind knapsack-testcase2.c knapsack.c
+  - valgrind --error-exitcode=5 --leak-check=yes ./knapsack-tc1-valgrind
+  - valgrind --error-exitcode=5 --leak-check=yes ./knapsack-tc2-valgrind
