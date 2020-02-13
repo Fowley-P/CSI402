@@ -1,3 +1,5 @@
+//Patrick Fowley
+
 #include <stdio.h> 
 #include <dirent.h> 
 #include <unistd.h>
@@ -12,8 +14,8 @@
 #include <sys/sysmacros.h>
 
 int main() { 
-    struct dirent *direntp;  // Pointer for directory entry 
-    struct stat fileStat; 
+    struct dirent *direntp;                                             //Pointer for directory entry 
+    struct stat fileStat;                                               //stores file info
     char cwd[200];
     char editTime[30];
     long max = 0;
@@ -22,19 +24,21 @@ int main() {
     double ltemp = 0;
     int count = 0;
 
-    struct tm *tmp = malloc(sizeof(struct tm));
-    struct passwd *pass = malloc(sizeof(struct passwd));
-    struct group *grp = malloc(sizeof(struct group));
+    struct tm *tmp = malloc(sizeof(struct tm));                         //pointer to time info
+    struct passwd *pass = malloc(sizeof(struct passwd));                //pointer to password
+    struct group *grp = malloc(sizeof(struct group));                   //pointer to group info
 
-    DIR *dr = opendir(".");  // opendir() returns a pointer of DIR type.
+    DIR *dr = opendir(".");                                             //pointer to the current directory
 
-    if(dr == NULL){
-        perror("ls: cannot open directory '.'");
+    if(dr == NULL){                                                     //if the directory can't be opened
+        perror("ls: cannot open directory '.'");                        //kick it back with an error
         return -1;
     }
-
+    
+    //in order for the output to match, the files must be looped through twice to print the total # of links in the right place
+    //it's less processor efficient, but much more memory efficient
     while ((direntp = readdir(dr)) != NULL) {
-        lstat(direntp->d_name, &fileStat);
+        lstat(direntp->d_name, &fileStat);                              
         if (max < fileStat.st_size){
             max = fileStat.st_size;
         }
@@ -46,8 +50,9 @@ int main() {
         count += fileStat.st_blocks;
     }
 
-    printf("total %d\n", count>>1);
-
+    printf("total %d\n", count>>1);                                     //the target architecture printed 2x the links of the target output
+    
+    //determines how many spaces are needed for proper output alignment
     while(pow(10, temp) < max) {
         temp++;
     }
@@ -56,9 +61,10 @@ int main() {
     }
 
     closedir(dr);
-
+    //close the directory to reopen it from the start
     dr = opendir(".");
 
+    //loop back through to print out the relevant info
     while ((direntp = readdir(dr)) != NULL){
       	count = 0;
         lstat(direntp->d_name,&fileStat);
