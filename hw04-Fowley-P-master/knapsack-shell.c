@@ -78,7 +78,7 @@ int main (int argc, char **argv) {
 	while (1) {									//runs until the user enters exit command
 		printf("> ");
 		fgets(in, 15, stdin);
-		in[strcspn(in, "\n")] = 0;						//terminates string where the user hits enter
+		in[strcspn(in, "\n")] = '\0';						//terminates string where the user hits enter
 		if (in[0] != 'q' && in[1] != ' ' && in[0] != 'p')			//p & q are the only commands which don't require extra info
 			fprintf(stderr, "Unknown command: %s\n", in);			//so if the first character isn't p or q
 											//but the 2nd is a space, not a command
